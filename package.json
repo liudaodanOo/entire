@@ -1,0 +1,29 @@
+{
+  "name": "entire",
+  "version": "0.0.1",
+  "description": "All repositories of liudaodanoo@126.com",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liudaodanOo/entire.git"
+  },
+  "author": "liudaodanoo@126.com",
+  "license": "MIT",
+  "type": "module",
+  "homepage": "https://github.com/liudaodanOo/entire#readme",
+  "devDependencies": {
+    "@commitlint/cli": "19.3.0",
+    "@commitlint/config-conventional": "19.2.2",
+    "commitizen": "4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "9.0.11"
+  },
+  "scripts": {
+    "prepare": "husky || true",
+    "test": "test script will run every time you commit"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
