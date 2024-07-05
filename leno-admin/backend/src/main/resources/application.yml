@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: puzzle-sys
+  datasource:
+    url: jdbc:mysql://localhost:3306/leno_admin?useSSL=false
+    username: root
+    password: rootroot
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+server:
+  port: 9093
+mybatis-plus:
+  mapper-locations: classpath:mappers/*.xml
+  configuration:
+    map-underscore-to-camel-case: false
+    auto-mapping-behavior: full
+    lazy-loading-enabled: true
+    aggressive-lazy-loading: false
+  type-aliases-package: com.alison.puzzle.pojo
