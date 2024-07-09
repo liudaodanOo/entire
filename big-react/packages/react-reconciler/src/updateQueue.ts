@@ -44,7 +44,7 @@ export const enqueueUpdate = <State>(
 };
 
 /**
- * 消费update
+ * 计算状态最新值
  * @param baseState
  * @param pendingState
  * @returns
