@@ -1,0 +1,17 @@
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+function App() {
+	return (
+		<div>
+			<Child />
+		</div>
+	);
+}
+
+function Child() {
+	console.log('Child');
+	return <span>big-react</span>;
+}
+
+ReactDOM.createRoot(document.getElementById('root')!).render(<App />);
