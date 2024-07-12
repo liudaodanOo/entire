@@ -91,6 +91,7 @@ function reconcileChildren(wip: FiberNode, children?: ReactElementType) {
 		// update
 		wip.child = reconcileChildFibers(wip, current?.child, children);
 	} else {
+		// @TODO: 目前来看好像永远都不会走这里
 		// mount
 		wip.child = mountChildFibers(wip, null, children);
 	}
