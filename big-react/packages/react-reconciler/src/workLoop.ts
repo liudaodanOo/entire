@@ -12,7 +12,7 @@ let workInProgress: FiberNode | null;
  * @param fiber
  */
 export function scheduleUpdateOnFiber(fiber: FiberNode) {
-	// @TODO 调度功能
+	// @TODO: 调度功能
 	// fiberRootNode
 	const root = markUpdateFromFiberToRoot(fiber);
 	renderRoot(root);

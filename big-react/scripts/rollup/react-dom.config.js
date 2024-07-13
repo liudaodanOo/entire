@@ -26,7 +26,6 @@ export default [
 				format: 'umd'
 			}
 		],
-		// @TODO: external属性已废弃
 		external: [...Object.keys(peerDependencies)],
 		plugins: [
 			...getBaseRollupPlugins(),
