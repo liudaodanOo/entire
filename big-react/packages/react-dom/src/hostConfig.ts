@@ -1,5 +1,9 @@
+import { FiberNode } from 'react-reconciler/src/fiber';
+import { HostText } from 'react-reconciler/src/workTags';
+
 export type Container = Element;
 export type Instance = Element;
+export type TextInstance = Text;
 
 /**
  * 创建宿主环境对应的实例
@@ -40,3 +44,43 @@ export const createTextInstance = (content: string) => {
  * @param child
  */
 export const appendChildToContainer = appendInitialChild;
+
+/**
+ * 进行更新
+ * 根据不同的fiber.tag执行不同的更新方法
+ * @param fiber
+ * @returns
+ */
+export function commitUpdate(fiber: FiberNode) {
+	switch (fiber.tag) {
+		case HostText:
+			const text = fiber.memoizedProps.content;
+			return commitTextUpdate(fiber.stateNode, text);
+		default:
+			if (__DEV__) {
+				console.warn('未实现的Update类型', fiber);
+			}
+			break;
+	}
+}
+
+/**
+ * 更新文本
+ * @param textInstance
+ * @param content
+ */
+export function commitTextUpdate(textInstance: TextInstance, content: string) {
+	textInstance.textContent = content;
+}
+
+/**
+ * 移除子节点
+ * @param child
+ * @param container
+ */
+export function removeChild(
+	child: Instance | TextInstance,
+	container: Container
+) {
+	container.removeChild(child);
+}
