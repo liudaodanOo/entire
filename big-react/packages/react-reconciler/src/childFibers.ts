@@ -27,9 +27,9 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 		currentFiber: FiberNode | null,
 		element: ReactElementType
 	) {
-		work: if (currentFiber !== null) {
+		const key = element.key;
+		work: while (currentFiber !== null) {
 			// update
-			const key = element.key;
 			if (currentFiber.key === key) {
 				// key相同
 				if (element.$$typeof === REACT_ELEMENT_TYPE) {
@@ -37,11 +37,13 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 						// type相同
 						const existing = useFiber(currentFiber, element.props);
 						existing.return = returnFiber;
+						// 当前节点可复用，标记剩下的节点删除
+						deleteRemainingChildren(returnFiber, currentFiber.sibling);
 						return existing;
 					}
 
-					// 删掉旧的
-					deleteChild(returnFiber, currentFiber);
+					// key相同，type不同，删掉所有旧的
+					deleteRemainingChildren(returnFiber, currentFiber);
 					break work;
 				} else {
 					if (__DEV__) {
@@ -50,8 +52,9 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 					}
 				}
 			} else {
-				// 删掉旧的
+				// key不同，删掉旧的
 				deleteChild(returnFiber, currentFiber);
+				currentFiber = currentFiber.sibling;
 			}
 		}
 
@@ -73,17 +76,19 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 		currentFiber: FiberNode | null,
 		content: string | number
 	) {
-		if (currentFiber !== null) {
+		while (currentFiber !== null) {
 			// update
 			if (currentFiber.tag === HostText) {
 				// 类型没变，可以复用
 				const existing = useFiber(currentFiber, { content });
 				existing.return = returnFiber;
+				deleteRemainingChildren(returnFiber, currentFiber.sibling);
 				return existing;
 			}
 
 			// 删除旧的
 			deleteChild(returnFiber, currentFiber);
+			currentFiber = currentFiber.sibling;
 		}
 
 		const fiber = new FiberNode(HostText, { content }, null);
@@ -121,6 +126,27 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 			returnFiber.flags |= ChildDeletion;
 		} else {
 			deletions.push(childToDelete);
+		}
+	}
+
+	/**
+	 * 删除剩余的child fiber
+	 * @param returnFiber
+	 * @param currentFirstFiber
+	 * @returns
+	 */
+	function deleteRemainingChildren(
+		returnFiber: FiberNode,
+		currentFirstFiber: FiberNode | null
+	) {
+		if (!shouldTrackEffects) {
+			return;
+		}
+
+		let childToDelete = currentFirstFiber;
+		while (childToDelete !== null) {
+			deleteChild(returnFiber, childToDelete);
+			childToDelete = childToDelete.sibling;
 		}
 	}
 
