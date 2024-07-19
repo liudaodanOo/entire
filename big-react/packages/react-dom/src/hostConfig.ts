@@ -86,3 +86,17 @@ export function removeChild(
 ) {
 	container.removeChild(child);
 }
+
+/**
+ * 在目标节点前插入节点
+ * @param child
+ * @param container
+ * @param before
+ */
+export function insertChildToContainer(
+	child: Instance,
+	container: Instance,
+	before: Instance
+) {
+	container.insertBefore(child, before);
+}

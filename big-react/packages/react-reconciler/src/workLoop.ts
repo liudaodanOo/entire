@@ -157,12 +157,12 @@ function completeUnitOfWork(fiber: FiberNode) {
 		const sibling = node.sibling;
 
 		if (sibling !== null) {
-			// 有兄弟节点，则给兄弟节点执行递
+			// 有sibling fiber，则给sibling fiber执行递
 			workInProgress = sibling;
 			return;
 		}
 
-		// 没有有兄弟节点，则准备给父节点执行归
+		// 没有有sibling fiber，则准备给return fiber执行归
 		node = node.return;
 		workInProgress = node;
 	} while (node !== null);

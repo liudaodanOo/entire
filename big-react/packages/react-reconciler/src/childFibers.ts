@@ -300,7 +300,7 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 					);
 				default:
 					if (__DEV__) {
-						console.warn('为实现的reconcile类型', newChild);
+						console.warn('未实现的reconcile类型', newChild);
 					}
 					break;
 			}
@@ -321,11 +321,11 @@ function ChildReconciler(shouldTrackEffects: boolean) {
 
 		// 兜底删除
 		if (currentFiber !== null) {
-			deleteChild(returnFiber, currentFiber);
+			deleteRemainingChildren(returnFiber, currentFiber);
 		}
 
 		if (__DEV__) {
-			console.warn('为实现的reconcile类型', newChild);
+			console.warn('未实现的reconcile类型', newChild);
 		}
 		return null;
 	};
