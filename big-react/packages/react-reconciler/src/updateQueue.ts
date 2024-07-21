@@ -3,6 +3,7 @@ import { Action } from 'shared/ReactTypes';
 
 export interface Update<State> {
 	action: Action<State>;
+	next: Update<any> | null;
 }
 
 export interface UpdateQueue<State> {
@@ -18,7 +19,7 @@ export interface UpdateQueue<State> {
  * @returns
  */
 export const createUpdate = <State>(action: Action<State>): Update<State> => {
-	return { action };
+	return { action, next: null };
 };
 
 /**
@@ -36,6 +37,7 @@ export const createUpdateQueue = <State>() => {
 
 /**
  * 将update加入updateQueue中
+ * 通过环状链表维系多个udate之间的关系
  * @param updateQueue
  * @param update
  */
@@ -43,6 +45,16 @@ export const enqueueUpdate = <State>(
 	updateQueue: UpdateQueue<State>,
 	update: Update<State>
 ) => {
+	const pending = updateQueue.shared.pending;
+	if (pending === null) {
+		// pending = a -> a
+		update.next = update;
+	} else {
+		// pending = b -> a -> b
+		// pending = c -> a -> b -> c
+		update.next = pending.next;
+		pending.next = update;
+	}
 	updateQueue.shared.pending = update;
 };
 
