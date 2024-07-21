@@ -3,6 +3,7 @@ import { commitMutationEffects } from './commitWork';
 import { completeWork } from './completeWork';
 import { createWorkInProgress, FiberNode, FiberRootNode } from './fiber';
 import { MutationMask, NoFlags } from './fiberFlags';
+import { Lane, mergeLanes } from './fiberLanes';
 import { HostRoot } from './workTags';
 
 let workInProgress: FiberNode | null;
@@ -11,11 +12,21 @@ let workInProgress: FiberNode | null;
  * 处理fiber上的update
  * @param fiber
  */
-export function scheduleUpdateOnFiber(fiber: FiberNode) {
+export function scheduleUpdateOnFiber(fiber: FiberNode, lane: Lane) {
 	// @TODO: 调度功能
 	// fiberRootNode
 	const root = markUpdateFromFiberToRoot(fiber);
+	markRootUpdated(root, lane);
 	renderRoot(root);
+}
+
+/**
+ * 将lane记录到fiberRootNode中
+ * @param root
+ * @param lane
+ */
+function markRootUpdated(root: FiberRootNode, lane: Lane) {
+	root.pendingLanes = mergeLanes(root.pendingLanes, lane);
 }
 
 /**
