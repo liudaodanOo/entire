@@ -35,10 +35,14 @@ function App() {
 
 	// return <ul onClickCapture={() => setNum(num + 1)}>{arr}</ul>;
 	return (
-		<ul onClickCapture={() => setNum(num + 1)}>
-			<li>a</li>
-			<li>b</li>
-			{arr}
+		<ul
+			onClickCapture={() => {
+				setNum((num) => num + 1);
+				setNum((num) => num + 1);
+				setNum((num) => num + 1);
+			}}
+		>
+			{num}
 		</ul>
 	);
 }
